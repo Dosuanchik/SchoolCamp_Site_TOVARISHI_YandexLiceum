@@ -10,24 +10,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#hero">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#info">О лагере</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#schedule">Распорядок дня</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#program">План работ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#howto">Как попасть</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contacts">Контакты</a>
-                </li>
+                {% if current_user.is_authenticated %}
+                    <!-- Пункты для авторизованного пользователя -->
+                    <li class="nav-item"><a class="nav-link" href="#hero">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#info">О лагере</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#schedule">Распорядок дня</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#program">План работ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#howto">Как попасть</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Выйти</a></li>
+                {% else %}
+                    <!-- Пункт для неавторизованного -->
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Вход</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

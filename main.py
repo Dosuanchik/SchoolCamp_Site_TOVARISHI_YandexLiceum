@@ -16,6 +16,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Пожалуйста, войдите для доступа к сайту.'
 
+
 # ---------- Модель пользователя ----------
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,15 +29,18 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 # ---------- Форма логина ----------
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired(), Length(1, 64)])
     password = PasswordField('Пароль', validators=[DataRequired()])
     submit = SubmitField('Войти')
+
 
 # ---------- Форма регистрации ----------
 class RegisterForm(FlaskForm):
@@ -49,6 +53,7 @@ class RegisterForm(FlaskForm):
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Пользователь с таким логином уже существует')
+
 
 # ---------- Маршруты ----------
 @app.route('/login', methods=['GET', 'POST'])
@@ -66,6 +71,7 @@ def login():
             flash('Неверный логин или пароль', 'danger')
     return render_template('login.html', form=form, title='Вход')
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -80,6 +86,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Регистрация')
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -87,11 +94,13 @@ def logout():
     flash('Вы вышли из системы', 'info')
     return redirect(url_for('login'))
 
+
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
     return render_template('index.html', title='Пришкольный лагерь Лицея №3')
+
 
 # ---------- Создание таблиц и тестового админа ----------
 with app.app_context():
